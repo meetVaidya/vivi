@@ -6,9 +6,10 @@ const Sidebar = () => {
     const links = [
         { href: "/docs", label: "Introduction" },
         { href: "/docs/getting-started", label: "Getting Started" },
-        { href: "/docs/configuration", label: "Configuration" },
-        { href: "/docs/providers", label: "Providers" },
-        { href: "/docs/callbacks", label: "Callbacks" },
+        { href: "/docs/userreg", label: "User Registration" },
+        { href: "/docs/userlog", label: "User Login" },
+        { href: "/docs/sendotp", label: "Send OTP" },
+        { href: "/docs/googleauth", label: "Google OAuth" },
     ];
 
     return (

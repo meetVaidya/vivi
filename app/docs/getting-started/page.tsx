@@ -25,7 +25,7 @@ const page = () => {
               Head to the API keys section and create a private key to
               authenticate your application.
           </li>
-          <div className="bg-amber-200/75 border border-red-500 rounded-lg px-4">
+          <div className="bg-[#154163] border border-red-500 rounded-lg px-4">
               <h3 className="text-xl font-semibold mt-6 mb-4">
                   Important Note
               </h3>

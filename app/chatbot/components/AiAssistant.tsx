@@ -45,7 +45,7 @@ const AiAssistant = () => {
             const data = await response.json();
             setConversationHistory((prevHistory) => [
                 ...prevHistory,
-                `AI: ${data.response}`,
+                `AI: ${data}`,
             ]);
         } catch (error) {
             console.error("Error fetching response:", error);
@@ -59,8 +59,8 @@ const AiAssistant = () => {
     };
 
     return (
-        <div className="flex flex-col h-full w-full max-w-2xl mx-auto  rounded-lg shadow-md">
-            <div className="flex-grow px-6 min-h-[75vh] overflow-y-auto ">
+        <div className="flex flex-col h-full w-full max-w-2xl mx-auto rounded-lg shadow-md">
+            <div className="flex-grow px-6 min-h-[75vh] overflow-y-auto">
                 {conversationHistory.map((message, index) => (
                     <div
                         key={index}

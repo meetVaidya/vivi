@@ -24,11 +24,11 @@ export default function Home() {
                     <h1 className="text-4xl sm:text-7xl lg:text-8xl font-bold font-[family-name:var(--font-geist-mono)] text-center pb-8">
                         The Open-Source Authentication Platform
                     </h1>
-                    <p className="font-[family-name:var(--font-geist-sans)] text-center text-lg py-12">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Deserunt amet ullam itaque ut non nihil eligendi
-                        molestiae modi? Quasi, doloremque? Officiis id suscipit
-                        voluptatibus dolore harum eum excepturi ipsam molestiae?
+                    <p className="font-[family-name:var(--font-geist-mono)] text-center text-lg py-12">
+                        Welcome to our platform, where security meets
+                        simplicity. Join us in revolutionizing authentication
+                        with open-source solutions tailored for developers and
+                        businesses alike.
                     </p>
                     <BentoDemo />
                     <HoverText />
