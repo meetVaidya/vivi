@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function AuthPage() {
@@ -50,9 +51,11 @@ export default function AuthPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
-                    <Button className="w-full bg-white text-black mb-4">
-                        Sign Up with Email
-                    </Button>
+                    <Link href="/dashboard/projectkeys">
+                        <Button className="w-full bg-white text-black mb-4">
+                            Sign Up with Email
+                        </Button>
+                    </Link>
                 </div>
             </div>
         </div>

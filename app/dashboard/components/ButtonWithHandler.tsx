@@ -46,7 +46,6 @@ const ButtonWithHandler = () => {
     const handleCreateApiKey = () => {
         const clientId = `project-${apiKeys.length + 1}`;
         const expirationDays = 30;
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const apiKey = generateApiKey(clientId, expirationDays);
         setApiKeys([...apiKeys, apiKeysDatabase[clientId]]);
     };
