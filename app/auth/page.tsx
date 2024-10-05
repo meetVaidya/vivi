@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -7,6 +7,7 @@ import { useState } from "react";
 
 export default function AuthPage() {
     const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     return (
         <div className="flex min-h-screen bg-[#111111] font-mono">
@@ -38,31 +39,20 @@ export default function AuthPage() {
                     </Label>
                     <Input
                         type="email"
-                        className="w-full p-2 mb-4 text-black rounded-lg"
+                        className="w-full p-2 mb-4 text-white rounded-lg"
                         placeholder="name@example.com"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
+                    <Input
+                        type="password"
+                        className="w-full p-2 mb-4 text-white rounded-lg"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
                     <Button className="w-full bg-white text-black mb-4">
-                        Sign In with Email
+                        Sign Up with Email
                     </Button>
-                    <div className="text-center text-sm mb-4 text-gray-400">
-                        OR CONTINUE WITH
-                    </div>
-                    <Button className="w-full bg-gray-700 text-white">
-                        GitHub
-                    </Button>
-                    <div className="text-xs mt-4 text-gray-400">
-                        By clicking continue, you agree to our{" "}
-                        <a href="#" className="underline">
-                            Terms of Service
-                        </a>{" "}
-                        and{" "}
-                        <a href="#" className="underline">
-                            Privacy Policy
-                        </a>
-                        .
-                    </div>
                 </div>
             </div>
         </div>
