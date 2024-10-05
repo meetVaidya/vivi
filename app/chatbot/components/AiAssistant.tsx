@@ -2,13 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { ArrowBottomLeftIcon } from "@radix-ui/react-icons";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // temporary api key
-const genAI = new GoogleGenerativeAI("AIzaSyBbzQDBefjNbhTiY4WtkHZQcvswb-HfwKE");
+const genAI = new GoogleGenerativeAI("AIzaSyCPvqza2ZbE_eIvpq4J6AeRR_FG8vN1Ugk");
 
 const getAiResponse = async (userInput: string): Promise<string> => {
     try {
@@ -28,7 +28,7 @@ const AiAssistant = () => {
     );
     const bottomOfChatRef = useRef<HTMLDivElement>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setUserInput(e.target.value);
     };
 
@@ -56,7 +56,7 @@ const AiAssistant = () => {
 
     return (
         <div className="flex flex-col h-full w-full max-w-2xl mx-auto  rounded-lg shadow-md">
-            <div className="flex-grow px-6 min-h-[70vh] overflow-y-auto ">
+            <div className="flex-grow px-6 min-h-[75vh] overflow-y-auto ">
                 {conversationHistory.map((message, index) => (
                     <div
                         key={index}
@@ -85,15 +85,15 @@ const AiAssistant = () => {
                 onSubmit={handleSubmit}
                 className="flex items-center p-4 border-t border-gray-200"
             >
-                <Textarea
+                <Input
+
                     value={userInput}
                     onChange={handleChange}
                     placeholder="Ask your question..."
-                    className="flex-grow p-2 mr-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
-                />
+                    className="flex-grow p-8 mr-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"/>
                 <Button
                     type="submit"
-                    className="bg-blue-500 text-white px-10 py-10 rounded-md hover:bg-blue-600"
+                    className="bg-blue-500 text-white p-9 rounded-md hover:bg-blue-600"
                 >
                     <ArrowBottomLeftIcon />
                 </Button>

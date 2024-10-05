@@ -13,8 +13,7 @@ export default function Page() {
                     browser or other client
                 </p>
             </div>
-            <div className="p-4 md:p-8 text-center rounded-lg border border-gray-300">
-                <p className="text-sm md:text-base p-4">Create an API key</p>
+            <div className="p-4 md:p-8 text-center">
                 <div className="">
                     <ButtonWithHandler />
                 </div>

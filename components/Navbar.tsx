@@ -15,23 +15,23 @@ export default function Navbar() {
                 </Link>
             </div>
             <div className="flex space-x-2">
-                <Button variant='secondary'>Examples</Button>
-                <Button variant='secondary'>Components</Button>
-                <Button variant='secondary'>Documentation</Button>
-            </div>
-            {/* <NavMenu /> */}
+                <Button variant="secondary">Examples</Button>
+                <Button variant="secondary">Components</Button>
+                <Link href='/docs'>
+                    <Button variant="secondary">Documentation</Button>
+                </Link>
+            </div>  
             <div className="flex items-center space-x-4">
-                <Link href='/dashboard'>
+                <Link href="/auth">
                     <Button variant="secondary" className="text-white">
                         Login
                     </Button>
                 </Link>
-
-                <Button
-                    className="text-white border-white hover:bg-white hover:text-black"
-                >
-                    Start your trial
-                </Button>
+                <Link href="/auth">
+                    <Button className="text-white border-white hover:bg-white hover:text-black">
+                        Start your trial
+                    </Button>
+                </Link>
             </div>
         </nav>
     );

@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const Sidebar = () => {
     const links = [
@@ -11,20 +12,32 @@ const Sidebar = () => {
     ];
 
     return (
-        <nav className="w-64 p-6 overflow-y-auto">
-            <h1 className="text-2xl font-bold mb-6">AuthenticateMe Docs</h1>
-            <ul className="space-y-2">
-                {links.map((link) => (
-                    <li key={link.href}>
-                        <Link
-                            href={link.href}
-                            className="text-white hover:text-gray-300"
-                        >
-                            {link.label}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
+        <nav className="w-64 p-6 flex flex-col justify-between h-full overflow-y-auto">
+            <div>
+                <Link href="/">
+                    <h1 className="text-2xl font-bold mb-6">
+                        AuthenticateMe Docs
+                    </h1>
+                </Link>
+                <ul className="space-y-2">
+                    {links.map((link) => (
+                        <li key={link.href}>
+                            <Link
+                                href={link.href}
+                                className="text-white hover:text-gray-300"
+                            >
+                                {link.label}
+                            </Link>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            <div className="mt-auto">
+                <Link href="/chatbot">
+                    <Button>Ask AI</Button>
+                </Link>
+            </div>
         </nav>
     );
 };

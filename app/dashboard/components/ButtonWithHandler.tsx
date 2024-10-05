@@ -1,16 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { PlusCircle, Trash2, Edit } from "lucide-react";
+import { PlusCircle, Trash2 } from "lucide-react";
 import { randomBytes } from "crypto";
 import { Button } from "@/components/ui/button";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
     Table,
     TableBody,
@@ -19,11 +13,11 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import { Switch } from "@/components/ui/switch";
 
 interface ApiKeyData {
     clientId: string;
     secret: string;
-    allowedMethods: string[];
     expirationDate: Date;
     revoked: boolean;
 }
@@ -31,11 +25,7 @@ interface ApiKeyData {
 const apiKeysDatabase: { [key: string]: ApiKeyData } = {};
 
 // Function to generate a new API key
-function generateApiKey(
-    clientId: string,
-    allowedMethods: string[],
-    expirationDays: number
-) {
+function generateApiKey(clientId: string, expirationDays: number) {
     const secret = randomBytes(32).toString("hex");
     const expirationDate = new Date();
     expirationDate.setDate(expirationDate.getDate() + expirationDays);
@@ -43,7 +33,6 @@ function generateApiKey(
     const apiKeyData = {
         clientId,
         secret,
-        allowedMethods,
         expirationDate,
         revoked: false,
     };
@@ -54,130 +43,102 @@ function generateApiKey(
 
 const ButtonWithHandler = () => {
     const [apiKeys, setApiKeys] = useState<ApiKeyData[]>([]);
-    const [newAllowedMethods, setNewAllowedMethods] = useState("");
 
+    // Handle the creation of new API key
     const handleCreateApiKey = () => {
-        const clientId = `client-${apiKeys.length + 1}`;
-        const allowedMethods = ["GET", "POST"];
+        const clientId = `project-${apiKeys.length + 1}`;
         const expirationDays = 30;
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const apiKey = generateApiKey(clientId, allowedMethods, expirationDays);
+        const apiKey = generateApiKey(clientId, expirationDays);
         setApiKeys([...apiKeys, apiKeysDatabase[clientId]]);
     };
 
-    const handleRevokeApiKey = (clientId: string) => {
+    // Handle key revocation toggle
+    const handleToggleRevoked = (clientId: string) => {
         if (apiKeysDatabase[clientId]) {
-            apiKeysDatabase[clientId].revoked = true;
-            setApiKeys(
-                apiKeys.map((key) =>
-                    key.clientId === clientId ? { ...key, revoked: true } : key
-                )
-            );
-        }
-    };
-
-    const handleUpdateApiKeyScope = (clientId: string) => {
-        if (apiKeysDatabase[clientId]) {
-            apiKeysDatabase[clientId].allowedMethods = newAllowedMethods
-                .split(",")
-                .map((method) => method.trim());
+            const updatedRevokedStatus = !apiKeysDatabase[clientId].revoked;
+            apiKeysDatabase[clientId].revoked = updatedRevokedStatus;
             setApiKeys(
                 apiKeys.map((key) =>
                     key.clientId === clientId
-                        ? {
-                              ...key,
-                              allowedMethods: newAllowedMethods
-                                  .split(",")
-                                  .map((method) => method.trim()),
-                          }
+                        ? { ...key, revoked: updatedRevokedStatus }
                         : key
                 )
             );
         }
     };
 
+    const handleDeleteApiKey = (clientId: string) => {
+        const isConfirmed = window.confirm(
+            "Are you sure you want to delete this API key? This action cannot be undone."
+        );
+        if (isConfirmed) {
+            delete apiKeysDatabase[clientId];
+            setApiKeys(apiKeys.filter((key) => key.clientId !== clientId));
+        }
+    };
+
     return (
-        <div className="container mx-auto p-8">
+        <div className="container mx-auto p-4 sm:p-8">
             <Card>
-                <CardHeader>
-                    <CardTitle>API Keys</CardTitle>
-                </CardHeader>
                 <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Client ID</TableHead>
-                                <TableHead>Secret</TableHead>
-                                <TableHead>Allowed Methods</TableHead>
-                                <TableHead>Expiration Date</TableHead>
-                                <TableHead>Revoked</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {apiKeys.map((apiKey) => (
-                                <TableRow key={apiKey.clientId}>
-                                    <TableCell>{apiKey.clientId}</TableCell>
-                                    <TableCell>{apiKey.secret}</TableCell>
-                                    <TableCell>
-                                        {apiKey.allowedMethods.join(", ")}
-                                    </TableCell>
-                                    <TableCell>
-                                        {apiKey.expirationDate.toLocaleDateString()}
-                                    </TableCell>
-                                    <TableCell>
-                                        {apiKey.revoked ? "Yes" : "No"}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex gap-2">
-                                            <Button
-                                                variant="destructive"
-                                                size="sm"
-                                                onClick={() =>
-                                                    handleRevokeApiKey(
+                    <div className="overflow-x-auto">
+                        <Table className="min-w-full">
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Project ID</TableHead>
+                                    <TableHead>Secret</TableHead>
+                                    <TableHead>Expiration Date</TableHead>
+                                    <TableHead>Revoked</TableHead>
+                                    <TableHead>Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {apiKeys.map((apiKey) => (
+                                    <TableRow key={apiKey.clientId}>
+                                        <TableCell>{apiKey.clientId}</TableCell>
+                                        <TableCell>{apiKey.secret}</TableCell>
+                                        <TableCell>
+                                            {apiKey.expirationDate.toLocaleDateString()}
+                                        </TableCell>
+                                        <TableCell>
+                                            <Switch
+                                                checked={apiKey.revoked}
+                                                onCheckedChange={() =>
+                                                    handleToggleRevoked(
                                                         apiKey.clientId
                                                     )
                                                 }
-                                            >
-                                                <Trash2 className="h-4 w-4" />
-                                            </Button>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => {
-                                                    // You might want to open a modal or similar here to get the new scope from the user
-                                                    const newScope = prompt(
-                                                        "Enter new allowed methods (comma-separated):",
-                                                        apiKey.allowedMethods.join(
-                                                            ", "
-                                                        )
-                                                    );
-                                                    if (newScope) {
-                                                        setNewAllowedMethods(
-                                                            newScope
-                                                        );
-                                                        handleUpdateApiKeyScope(
+                                            />
+                                        </TableCell>
+                                        <TableCell>
+                                            <div className="flex gap-2">
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() =>
+                                                        handleDeleteApiKey(
                                                             apiKey.clientId
-                                                        );
+                                                        )
                                                     }
-                                                }}
-                                            >
-                                                <Edit className="h-4 w-4" />
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
                 </CardContent>
-                <CardFooter className="flex justify-end">
-                    <Button onClick={handleCreateApiKey}>
-                        <PlusCircle className="h-5 w-5 mr-2" />
-                        Create new secret key
-                    </Button>
-                </CardFooter>
             </Card>
+            <div className="flex justify-end py-4">
+                <Button onClick={handleCreateApiKey}>
+                    <PlusCircle className="h-5 w-5 mr-2" />
+                    Create new secret key
+                </Button>
+            </div>
         </div>
     );
 };
