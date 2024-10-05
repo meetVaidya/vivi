@@ -43,8 +43,6 @@ function generateApiKey(clientId: string, expirationDays: number) {
 
 const ButtonWithHandler = () => {
     const [apiKeys, setApiKeys] = useState<ApiKeyData[]>([]);
-
-    // Handle the creation of new API key
     const handleCreateApiKey = () => {
         const clientId = `project-${apiKeys.length + 1}`;
         const expirationDays = 30;
@@ -53,7 +51,6 @@ const ButtonWithHandler = () => {
         setApiKeys([...apiKeys, apiKeysDatabase[clientId]]);
     };
 
-    // Handle key revocation toggle
     const handleToggleRevoked = (clientId: string) => {
         if (apiKeysDatabase[clientId]) {
             const updatedRevokedStatus = !apiKeysDatabase[clientId].revoked;

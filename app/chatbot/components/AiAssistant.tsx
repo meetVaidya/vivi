@@ -1,25 +1,12 @@
-"use client"; // For client-side interactivity
+"use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { ArrowBottomLeftIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
-// temporary api key
-const genAI = new GoogleGenerativeAI("AIzaSyCPvqza2ZbE_eIvpq4J6AeRR_FG8vN1Ugk");
-
-const getAiResponse = async (userInput: string): Promise<string> => {
-    try {
-        const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-        const result = await model.generateContent(userInput);
-        return result.response.text();
-    } catch (error) {
-        console.error("Error fetching AI response:", error);
-        return "An error occurred. Please try again later.";
-    }
-};
+// Replace with your actual Vercel Serverless Function URL
+const API_ENDPOINT = "http://127.0.0.1:9000/generate";
 
 const AiAssistant = () => {
     const [userInput, setUserInput] = useState("");
@@ -37,22 +24,39 @@ const AiAssistant = () => {
 
         if (userInput.trim() === "") return;
 
-        setConversationHistory([...conversationHistory, `You: ${userInput}`]);
-        const aiResponse = await getAiResponse(userInput);
-
-        setConversationHistory([
-            ...conversationHistory,
+        setConversationHistory((prevHistory) => [
+            ...prevHistory,
             `You: ${userInput}`,
-            `AI: ${aiResponse}`,
         ]);
+
+        try {
+            const response = await fetch(API_ENDPOINT, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ text: userInput }),
+            });
+
+            if (!response.ok) {
+                throw new Error(
+                    `API request failed with status ${response.status}`
+                );
+            }
+
+            const data = await response.json();
+            setConversationHistory((prevHistory) => [
+                ...prevHistory,
+                `AI: ${data.response}`,
+            ]);
+        } catch (error) {
+            console.error("Error fetching response:", error);
+            setConversationHistory((prevHistory) => [
+                ...prevHistory,
+                "AI: An error occurred. Please try again later.",
+            ]);
+        }
+
         setUserInput("");
     };
-
-    useEffect(() => {
-        if (bottomOfChatRef.current) {
-            bottomOfChatRef.current.scrollIntoView({ behavior: "smooth" });
-        }
-    }, [conversationHistory]);
 
     return (
         <div className="flex flex-col h-full w-full max-w-2xl mx-auto  rounded-lg shadow-md">
@@ -86,11 +90,11 @@ const AiAssistant = () => {
                 className="flex items-center p-4 border-t border-gray-200"
             >
                 <Input
-
                     value={userInput}
                     onChange={handleChange}
                     placeholder="Ask your question..."
-                    className="flex-grow p-8 mr-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"/>
+                    className="flex-grow p-8 mr-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300"
+                />
                 <Button
                     type="submit"
                     className="bg-blue-500 text-white p-9 rounded-md hover:bg-blue-600"
